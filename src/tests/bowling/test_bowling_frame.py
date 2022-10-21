@@ -13,6 +13,23 @@ def test_create_frame_with_second_throw_after_strike():
         BowlingFrame(first_throw=10, second_throw=1)
 
 
+@pytest.mark.parametrize("pins", [-1, 11, 5.5])
+def test_create_frame_with_invalid_pins_in_first_throw(pins):
+    with pytest.raises(ValueError):
+        BowlingFrame(first_throw=pins)
+
+
+@pytest.mark.parametrize("pins", [-1, 11, 5.5])
+def test_create_frame_with_invalid_pins_in_second_throw(pins):
+    with pytest.raises(ValueError):
+        BowlingFrame(first_throw=0, second_throw=pins)
+
+
+def test_create_frame_with_too_many_total_pins():
+    with pytest.raises(ValueError):
+        BowlingFrame(first_throw=9, second_throw=9)
+
+
 @pytest.mark.parametrize("pins", [None, -1, 11, 5.5])
 def test_record_throw_raises_exception_with_invalid_pins(pins):
     frame = BowlingFrame()
