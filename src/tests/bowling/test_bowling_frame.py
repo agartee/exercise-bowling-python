@@ -3,6 +3,16 @@ import pytest
 from bowling.bowling_frame import BowlingFrame
 
 
+def test_create_frame_with_second_throw_but_no_first():
+    with pytest.raises(ValueError):
+        BowlingFrame(second_throw=1)
+
+
+def test_create_frame_with_second_throw_after_strike():
+    with pytest.raises(ValueError):
+        BowlingFrame(first_throw=10, second_throw=1)
+
+
 @pytest.mark.parametrize("pins", [None, -1, 11, 5.5])
 def test_record_throw_raises_exception_with_invalid_pins(pins):
     frame = BowlingFrame()
@@ -11,16 +21,6 @@ def test_record_throw_raises_exception_with_invalid_pins(pins):
         frame.record_throw(pins)
 
     assert "Invalid number of pins" in str(err.value)
-
-
-def test_create_frame_with_second_throw_but_no_first_throws():
-    with pytest.raises(ValueError):
-        BowlingFrame(second_throw=1)
-
-
-def test_create_frame_with_second_throw_after_strike():
-    with pytest.raises(ValueError):
-        BowlingFrame(first_throw=10, second_throw=1)
 
 
 def test_record_single_throw_recorded_as_first_throw():
@@ -99,14 +99,14 @@ def test_is_strike_with_first_throw_not_10_pins():
     assert frame.is_strike == False
 
 
-def test_equals_with_equivalent_objects():
+def test_frame_equality_with_equivalent_objects():
     frame1 = BowlingFrame(idx=1, first_throw=1, second_throw=1)
     frame2 = BowlingFrame(idx=1, first_throw=1, second_throw=1)
 
     assert frame1 == frame2
 
 
-def test_equals_with_non_equivalent_objects():
+def test_frame_equality_with_non_equivalent_objects():
     frame = BowlingFrame(idx=1, first_throw=1, second_throw=1)
 
     assert not frame == "abc"

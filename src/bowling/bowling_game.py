@@ -1,11 +1,14 @@
 from bowling.bowling_frame import BowlingFrame
+from bowling.last_bowling_frame import LastBowlingFrame
 
 
 class BowlingGame:
     def __init__(self):
         self._frames = []
-        for i in range(0, 10):
+        for i in range(0, 9):
             self._frames.append(BowlingFrame(idx=i))
+
+        self._frames.append(LastBowlingFrame(idx=9))
 
         self._current_frame = self.frames[0]
 
@@ -16,9 +19,12 @@ class BowlingGame:
     @property
     def frame_scores(self):
         scores = []
+
         for frame in self.frames:
             if not frame.is_complete:
                 scores.append(None)
+            elif frame.idx == 9:
+                scores.append(self._calculate_last_frame_score())
             elif frame.is_strike:
                 scores.append(self._calculate_strike_frame_score(frame))
             elif frame.is_spare:
@@ -55,7 +61,7 @@ class BowlingGame:
 
         subsequent_throw = (
             self.frames[frame.idx + 2].first_throw
-            if next_frame.is_strike
+            if not isinstance(next_frame, LastBowlingFrame) and next_frame.is_strike
             else next_frame.second_throw
         )
 
@@ -63,3 +69,16 @@ class BowlingGame:
             return None
 
         return frame.first_throw + next_throw + subsequent_throw
+
+    def _calculate_last_frame_score(self):
+        last_frame = self.frames[-1]
+        scores = [
+            x if x is not None else 0
+            for x in [
+                last_frame.first_throw,
+                last_frame.second_throw,
+                last_frame.third_throw,
+            ]
+        ]
+
+        return sum(scores)

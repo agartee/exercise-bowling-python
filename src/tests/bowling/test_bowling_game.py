@@ -164,3 +164,51 @@ def test_total_score_with_strike_and_two_following_strikes():
 
     result = game.total_score
     assert result == 30
+
+
+def test_frame_score_for_full_game_with_no_bonuses_on_last_frame():
+    game = BowlingGame()
+
+    for i in range(0, 9):  # standard frames
+        game.record_throw(10)
+
+    # last frame
+    game.record_throw(1)
+    game.record_throw(1)
+
+    result = game.frame_scores
+    assert result == [30] * 7 + [21, 12, 2]
+
+
+def test_total_score_for_full_game_with_no_bonuses_on_last_frame():
+    game = BowlingGame()
+
+    for i in range(0, 9):  # standard frames
+        game.record_throw(10)
+
+    # last frame
+    game.record_throw(1)
+    game.record_throw(1)
+
+    result = game.total_score
+    assert result == 245
+
+
+def test_frame_score_for_perfect_game():
+    game = BowlingGame()
+
+    for i in range(0, 12):
+        game.record_throw(10)
+
+    result = game.frame_scores
+    assert result == [30] * 10
+
+
+def test_total_score_for_perfect_game():
+    game = BowlingGame()
+
+    for i in range(0, 12):
+        game.record_throw(10)
+
+    result = game.total_score
+    assert result == 300
