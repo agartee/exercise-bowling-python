@@ -1,7 +1,7 @@
 class BowlingFrame:
     def __init__(self, idx=0, first_throw=None, second_throw=None):
         if first_throw is None and second_throw is not None:
-            raise ValueError("Cannot initialize frame with second throw only")
+            raise ValueError("Cannot initialize frame without sequential throws")
 
         if first_throw == 10 and second_throw is not None:
             raise ValueError("Cannot initialize frame with second throw after strike")
