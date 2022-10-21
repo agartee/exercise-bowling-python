@@ -90,3 +90,77 @@ def test_total_score_with_spare_and_following_throw():
 
     result = game.total_score
     assert result == 12
+
+
+def test_frame_score_with_strike_and_no_following_throw():
+    game = BowlingGame()
+    game.record_throw(10)
+
+    result = game.frame_scores
+    assert result == [None] * 10
+
+
+def test_total_score_with_strike_and_no_following_throw():
+    game = BowlingGame()
+    game.record_throw(10)
+
+    result = game.total_score
+    assert result == 0
+
+
+def test_frame_score_with_strike_and_one_following_throw():
+    game = BowlingGame()
+    game.record_throw(10)
+    game.record_throw(1)  # incomplete frame
+
+    result = game.frame_scores
+    assert result == [None] * 10
+
+
+def test_total_score_with_strike_and_one_following_throw():
+    game = BowlingGame()
+    game.record_throw(10)
+    game.record_throw(1)  # incomplete frame
+
+    result = game.total_score
+    assert result == 0
+
+
+def test_frame_score_with_strike_and_two_following_throws():
+    game = BowlingGame()
+    game.record_throw(10)
+    game.record_throw(1)
+    game.record_throw(1)
+
+    result = game.frame_scores
+    assert result == [12, 2] + [None] * 8
+
+
+def test_total_score_with_strike_and_two_following_throws():
+    game = BowlingGame()
+    game.record_throw(10)
+    game.record_throw(1)
+    game.record_throw(1)
+
+    result = game.total_score
+    assert result == 14
+
+
+def test_frame_score_with_strike_and_two_following_strikes():
+    game = BowlingGame()
+    game.record_throw(10)
+    game.record_throw(10)
+    game.record_throw(10)
+
+    result = game.frame_scores
+    assert result == [30] + [None] * 9
+
+
+def test_total_score_with_strike_and_two_following_strikes():
+    game = BowlingGame()
+    game.record_throw(10)
+    game.record_throw(10)
+    game.record_throw(10)
+
+    result = game.total_score
+    assert result == 30
