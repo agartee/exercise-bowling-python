@@ -1,6 +1,2 @@
 $rootDir = (get-item $PSScriptRoot).Parent.FullName
-
-# **************************************************************************************
-# Unit Tests
-# **************************************************************************************
-pytest "$($rootDir)\tests"
+pytest --cov=bowling "$($rootDir)\src\tests"

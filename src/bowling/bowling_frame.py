@@ -23,6 +23,14 @@ class BowlingFrame:
     def is_complete(self):
         return self.second_throw is not None
 
+    @property
+    def is_spare(self):
+        return (
+            self.first_throw is not None
+            and self.second_throw is not None
+            and self.first_throw + self.second_throw == 10
+        )
+
     def record_throw(self, pins):
         if pins not in range(0, 10):
             raise ValueError(f"Invalid number of pins: {pins}")

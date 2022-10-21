@@ -52,3 +52,41 @@ def test_total_score_with_one_frame_and_no_bonuses():
 
     result = game.total_score
     assert result == 3
+
+
+def test_frame_score_with_spare_and_no_following_throw():
+    game = BowlingGame()
+    game.record_throw(9)
+    game.record_throw(1)
+
+    result = game.frame_scores
+    assert result == [None] * 10
+
+
+def test_total_score_with_spare_and_no_following_throw():
+    game = BowlingGame()
+    game.record_throw(9)
+    game.record_throw(1)
+
+    result = game.total_score
+    assert result == 0
+
+
+def test_frame_score_with_spare_and_following_throw():
+    game = BowlingGame()
+    game.record_throw(9)
+    game.record_throw(1)
+    game.record_throw(2)  # incomplete frame
+
+    result = game.frame_scores
+    assert result == [12] + [None] * 9
+
+
+def test_total_score_with_spare_and_following_throw():
+    game = BowlingGame()
+    game.record_throw(9)
+    game.record_throw(1)
+    game.record_throw(2)  # incomplete frame
+
+    result = game.total_score
+    assert result == 12
