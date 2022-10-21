@@ -27,3 +27,28 @@ def test_game_records_throw_on_next_frame_when_frame_is_complete():
 
     second_frame = game.frames[1]
     assert second_frame.first_throw == 3
+
+
+def test_frame_scores_with_no_throws():
+    game = BowlingGame()
+
+    result = game.frame_scores
+    assert result == [None] * 10
+
+
+def test_frame_scores_with_one_frame_and_no_bonus():
+    game = BowlingGame()
+    game.record_throw(1)
+    game.record_throw(2)
+
+    result = game.frame_scores
+    assert result == [3] + [None] * 9
+
+
+def test_total_score_with_one_frame_and_no_bonuses():
+    game = BowlingGame()
+    game.record_throw(1)
+    game.record_throw(2)
+
+    result = game.total_score
+    assert result == 3
