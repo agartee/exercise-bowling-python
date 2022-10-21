@@ -3,6 +3,9 @@ class BowlingFrame:
         if first_throw is None and second_throw is not None:
             raise ValueError("Cannot initialize frame with second throw only")
 
+        if first_throw == 10 and second_throw is not None:
+            raise ValueError("Cannot initialize frame with second throw after strike")
+
         self._idx = idx
         self._first_throw = first_throw
         self._second_throw = second_throw
@@ -21,7 +24,7 @@ class BowlingFrame:
 
     @property
     def is_complete(self):
-        return self.second_throw is not None
+        return self.is_strike or self.second_throw is not None
 
     @property
     def is_spare(self):
@@ -31,8 +34,12 @@ class BowlingFrame:
             and self.first_throw + self.second_throw == 10
         )
 
+    @property
+    def is_strike(self):
+        return self.first_throw == 10
+
     def record_throw(self, pins):
-        if pins not in range(0, 10):
+        if pins not in range(0, 11):  # include 10
             raise ValueError(f"Invalid number of pins: {pins}")
 
         if self._first_throw is None:

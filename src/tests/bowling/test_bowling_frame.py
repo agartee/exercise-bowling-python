@@ -18,6 +18,11 @@ def test_create_frame_with_second_throw_but_no_first_throws():
         BowlingFrame(second_throw=1)
 
 
+def test_create_frame_with_second_throw_after_strike():
+    with pytest.raises(ValueError):
+        BowlingFrame(first_throw=10, second_throw=1)
+
+
 def test_record_single_throw_recorded_as_first_throw():
     frame = BowlingFrame()
     frame.record_throw(1)
@@ -52,6 +57,12 @@ def test_is_complete_when_second_throw_set_is_true():
     assert frame.is_complete == True
 
 
+def test_is_complete_when_strike():
+    frame = BowlingFrame(first_throw=10)
+
+    assert frame.is_complete == True
+
+
 def test_is_spare_with_no_throws():
     frame = BowlingFrame()
 
@@ -74,3 +85,28 @@ def test_is_spare_with_two_throws_and_10_pins():
     frame = BowlingFrame(first_throw=9, second_throw=1)
 
     assert frame.is_spare == True
+
+
+def test_is_strike_with_first_throw_10_pins():
+    frame = BowlingFrame(first_throw=10)
+
+    assert frame.is_strike == True
+
+
+def test_is_strike_with_first_throw_not_10_pins():
+    frame = BowlingFrame(first_throw=9)
+
+    assert frame.is_strike == False
+
+
+def test_equals_with_equivalent_objects():
+    frame1 = BowlingFrame(idx=1, first_throw=1, second_throw=1)
+    frame2 = BowlingFrame(idx=1, first_throw=1, second_throw=1)
+
+    assert frame1 == frame2
+
+
+def test_equals_with_non_equivalent_objects():
+    frame = BowlingFrame(idx=1, first_throw=1, second_throw=1)
+
+    assert not frame == "abc"

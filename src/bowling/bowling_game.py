@@ -19,13 +19,12 @@ class BowlingGame:
         for frame in self.frames:
             if not frame.is_complete:
                 scores.append(None)
-                continue
-
-            if frame.is_spare:
+            elif frame.is_strike:
+                scores.append(self._calculate_strike_frame_score(frame))
+            elif frame.is_spare:
                 scores.append(self._calculate_spare_frame_score(frame))
-                continue
-
-            scores.append(frame.first_throw + frame.second_throw)
+            else:
+                scores.append(frame.first_throw + frame.second_throw)
 
         return scores
 
@@ -44,5 +43,23 @@ class BowlingGame:
         next_throw = self.frames[frame.idx + 1].first_throw
         if next_throw is None:
             return None
-        else:
-            return frame.first_throw + frame.second_throw + next_throw
+
+        return frame.first_throw + frame.second_throw + next_throw
+
+    def _calculate_strike_frame_score(self, frame):
+        next_frame = self.frames[frame.idx + 1]
+        next_throw = next_frame.first_throw
+
+        if next_throw is None:
+            return None
+
+        subsequent_throw = (
+            self.frames[frame.idx + 2].first_throw
+            if next_frame.is_strike
+            else next_frame.second_throw
+        )
+
+        if subsequent_throw is None:
+            return None
+
+        return frame.first_throw + next_throw + subsequent_throw
