@@ -1,15 +1,12 @@
 from bowling.bowling_frame import BowlingFrame
 from bowling.last_bowling_frame import LastBowlingFrame
 
+LAST_FRAME_INDEX = 9
+
 
 class BowlingGame:
     def __init__(self):
-        self._frames = []
-        for i in range(0, 9):
-            self._frames.append(BowlingFrame(idx=i))
-
-        self._frames.append(LastBowlingFrame(idx=9))
-
+        self.__create_frames()
         self._current_frame = self.frames[0]
 
     @property
@@ -23,12 +20,12 @@ class BowlingGame:
         for frame in self.frames:
             if not frame.is_complete:
                 scores.append(None)
-            elif frame.idx == 9:
-                scores.append(self._calculate_last_frame_score())
+            elif frame.idx == LAST_FRAME_INDEX:
+                scores.append(self.__calculate_last_frame_score())
             elif frame.is_strike:
-                scores.append(self._calculate_strike_frame_score(frame))
+                scores.append(self.__calculate_strike_frame_score(frame))
             elif frame.is_spare:
-                scores.append(self._calculate_spare_frame_score(frame))
+                scores.append(self.__calculate_spare_frame_score(frame))
             else:
                 scores.append(frame.first_throw + frame.second_throw)
 
@@ -45,14 +42,21 @@ class BowlingGame:
 
         self._current_frame.record_throw(pins)
 
-    def _calculate_spare_frame_score(self, frame):
+    def __create_frames(self):
+        self._frames = []
+        for i in range(0, 9):
+            self._frames.append(BowlingFrame(idx=i))
+
+        self._frames.append(LastBowlingFrame(idx=LAST_FRAME_INDEX))
+
+    def __calculate_spare_frame_score(self, frame):
         next_throw = self.frames[frame.idx + 1].first_throw
         if next_throw is None:
             return None
 
         return frame.first_throw + frame.second_throw + next_throw
 
-    def _calculate_strike_frame_score(self, frame):
+    def __calculate_strike_frame_score(self, frame):
         next_frame = self.frames[frame.idx + 1]
         next_throw = next_frame.first_throw
 
@@ -70,8 +74,8 @@ class BowlingGame:
 
         return frame.first_throw + next_throw + subsequent_throw
 
-    def _calculate_last_frame_score(self):
-        last_frame = self.frames[-1]
+    def __calculate_last_frame_score(self):
+        last_frame = self.frames[LAST_FRAME_INDEX]
         scores = [
             x if x is not None else 0
             for x in [

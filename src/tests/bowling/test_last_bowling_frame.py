@@ -13,6 +13,24 @@ def test_create_last_frame_with_third_throw_but_no_second():
         LastBowlingFrame(first_throw=1, third_throw=2)
 
 
+@pytest.mark.parametrize("pins", [-1, 11, 5.5])
+def test_create_last_frame_with_invalid_pins_in_first_throw(pins):
+    with pytest.raises(ValueError):
+        LastBowlingFrame(first_throw=pins)
+
+
+@pytest.mark.parametrize("pins", [-1, 11, 5.5])
+def test_create_last_frame_with_invalid_pins_in_second_throw(pins):
+    with pytest.raises(ValueError):
+        LastBowlingFrame(first_throw=10, second_throw=pins)
+
+
+@pytest.mark.parametrize("pins", [-1, 11, 5.5])
+def test_create_last_frame_with_invalid_pins_in_third_throw(pins):
+    with pytest.raises(ValueError):
+        LastBowlingFrame(first_throw=10, second_throw=10, third_throw=pins)
+
+
 def test_create_last_frame_with_third_throw_after_no_strike_or_spare():
     with pytest.raises(ValueError):
         LastBowlingFrame(first_throw=1, second_throw=2, third_throw=10)
@@ -56,7 +74,7 @@ def test_record_third_throw_with_no_preceding_spare_or_strikes():
     with pytest.raises(ValueError) as err:
         frame.record_throw(1)
 
-    expected_msg = "Cannot make third throw without preceding strikes or spare"
+    expected_msg = "Third throw not allowed without preceding strikes or spare"
     assert expected_msg in str(err.value)
 
 

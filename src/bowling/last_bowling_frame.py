@@ -1,18 +1,16 @@
+from bowling import MAX_PINS_PER_THROW
+
+
 class LastBowlingFrame:
     def __init__(self, idx=0, first_throw=None, second_throw=None, third_throw=None):
-        if (first_throw is None and second_throw is not None) or (
-            second_throw is None and third_throw is not None
-        ):
-            raise ValueError("Cannot initialize last frame without sequential throws")
-
-        if (
-            second_throw is not None
-            and first_throw + second_throw not in [10, 20]
-            and third_throw is not None
-        ):
-            raise ValueError(
-                "Cannot initialize with third throw without preceding strikes or spare"
-            )
+        Guard.against_non_sequential_throws(first_throw, second_throw, third_throw)
+        if first_throw:
+            Guard.against_invalid_pins(first_throw)
+        if second_throw:
+            Guard.against_invalid_pins(second_throw)
+        if third_throw:
+            Guard.against_invalid_pins(third_throw)
+            Guard.against_third_throw_if_not_allowed(first_throw, second_throw)
 
         self._idx = idx
         self._first_throw = first_throw
@@ -40,23 +38,19 @@ class LastBowlingFrame:
         if self.second_throw is None:
             return False
 
-        return self.first_throw + self.second_throw not in [10, 20] or (
-            self.first_throw + self.second_throw in [10, 20]
-            and self.third_throw is not None
+        return (
+            third_throw_not_allowed(self._first_throw, self.second_throw)
+            or self.third_throw is not None
         )
 
     def record_throw(self, pins):
-        if pins not in range(0, 11):  # include 10
-            raise ValueError(f"Invalid number of pins: {pins}")
+        Guard.against_invalid_pins(pins)
+        Guard.against_third_throw_if_not_allowed(self.first_throw, self.second_throw)
 
-        if self._first_throw is None:
+        if self.first_throw is None:
             self._first_throw = pins
-        elif self._second_throw is None:
+        elif self.second_throw is None:
             self._second_throw = pins
-        elif self._first_throw + self._second_throw not in [10, 20]:
-            raise ValueError(
-                "Cannot make third throw without preceding strikes or spare"
-            )
         else:
             self._third_throw = pins
 
@@ -70,3 +64,30 @@ class LastBowlingFrame:
             and self.second_throw == other.second_throw
             and self.third_throw == other.third_throw
         )
+
+
+class Guard:
+    def against_non_sequential_throws(first_throw, second_throw, third_throw):
+        if (first_throw is None and second_throw is not None) or (
+            second_throw is None and third_throw is not None
+        ):
+            raise ValueError("Cannot initialize last frame without sequential throws")
+
+    def against_third_throw_if_not_allowed(first_throw, second_throw):
+        if second_throw is not None and third_throw_not_allowed(
+            first_throw, second_throw
+        ):
+            raise ValueError(
+                "Third throw not allowed without preceding strikes or spare"
+            )
+
+    def against_invalid_pins(pins):
+        if pins not in range(0, 11):  # include 10
+            raise ValueError(f"Invalid number of pins: {pins}")
+
+
+def third_throw_not_allowed(first_throw, second_throw):
+    return first_throw + second_throw not in [
+        MAX_PINS_PER_THROW,
+        MAX_PINS_PER_THROW * 2,
+    ]

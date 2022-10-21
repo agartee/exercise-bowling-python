@@ -10,7 +10,7 @@ def test_record_throw_stores_pins():
     assert frame == BowlingFrame(first_throw=5)
 
 
-def test_game_throws_cannot_be_mutated_outside_game():
+def test_game_frames_cannot_be_mutated_outside_game():
     game = BowlingGame()
     initial_frame_count = len(game.frames)
 
@@ -36,6 +36,13 @@ def test_frame_scores_with_no_throws():
     assert result == [None] * 10
 
 
+def test_total_score_with_no_throws():
+    game = BowlingGame()
+
+    result = game.total_score
+    assert result == 0
+
+
 def test_frame_scores_with_one_frame_and_no_bonus():
     game = BowlingGame()
     game.record_throw(1)
@@ -54,7 +61,7 @@ def test_total_score_with_one_frame_and_no_bonuses():
     assert result == 3
 
 
-def test_frame_score_with_spare_and_no_following_throw():
+def test_frame_scores_with_spare_and_no_following_throw():
     game = BowlingGame()
     game.record_throw(9)
     game.record_throw(1)
@@ -72,7 +79,7 @@ def test_total_score_with_spare_and_no_following_throw():
     assert result == 0
 
 
-def test_frame_score_with_spare_and_following_throw():
+def test_frame_scores_with_spare_and_following_throw():
     game = BowlingGame()
     game.record_throw(9)
     game.record_throw(1)
@@ -92,7 +99,7 @@ def test_total_score_with_spare_and_following_throw():
     assert result == 12
 
 
-def test_frame_score_with_strike_and_no_following_throw():
+def test_frame_scores_with_strike_and_no_following_throw():
     game = BowlingGame()
     game.record_throw(10)
 
@@ -108,7 +115,7 @@ def test_total_score_with_strike_and_no_following_throw():
     assert result == 0
 
 
-def test_frame_score_with_strike_and_one_following_throw():
+def test_frame_scores_with_strike_and_one_following_throw():
     game = BowlingGame()
     game.record_throw(10)
     game.record_throw(1)  # incomplete frame
@@ -126,7 +133,7 @@ def test_total_score_with_strike_and_one_following_throw():
     assert result == 0
 
 
-def test_frame_score_with_strike_and_two_following_throws():
+def test_frame_scores_with_strike_and_two_following_throws():
     game = BowlingGame()
     game.record_throw(10)
     game.record_throw(1)
@@ -146,7 +153,7 @@ def test_total_score_with_strike_and_two_following_throws():
     assert result == 14
 
 
-def test_frame_score_with_strike_and_two_following_strikes():
+def test_frame_scores_with_strike_and_two_following_strikes():
     game = BowlingGame()
     game.record_throw(10)
     game.record_throw(10)
@@ -166,7 +173,7 @@ def test_total_score_with_strike_and_two_following_strikes():
     assert result == 30
 
 
-def test_frame_score_for_full_game_with_no_bonuses_on_last_frame():
+def test_frame_scores_for_full_game_with_no_bonuses_on_last_frame():
     game = BowlingGame()
 
     for i in range(0, 9):  # standard frames
@@ -194,7 +201,7 @@ def test_total_score_for_full_game_with_no_bonuses_on_last_frame():
     assert result == 245
 
 
-def test_frame_score_for_perfect_game():
+def test_frame_scores_for_perfect_game():
     game = BowlingGame()
 
     for i in range(0, 12):

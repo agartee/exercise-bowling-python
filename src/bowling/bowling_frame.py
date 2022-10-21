@@ -1,10 +1,15 @@
+from bowling import MAX_PINS_PER_THROW
+
+
 class BowlingFrame:
     def __init__(self, idx=0, first_throw=None, second_throw=None):
-        if first_throw is None and second_throw is not None:
-            raise ValueError("Cannot initialize frame without sequential throws")
-
-        if first_throw == 10 and second_throw is not None:
-            raise ValueError("Cannot initialize frame with second throw after strike")
+        Guard.against_non_sequential_throws(first_throw, second_throw)
+        Guard.against_second_throw_after_strike(first_throw, second_throw)
+        if first_throw:
+            Guard.against_invalid_pins(first_throw)
+        if second_throw:
+            Guard.against_invalid_pins(second_throw)
+            Guard.against_exceeding_allowed_pins_for_frame(first_throw, second_throw)
 
         self._idx = idx
         self._first_throw = first_throw
@@ -31,22 +36,20 @@ class BowlingFrame:
         return (
             self.first_throw is not None
             and self.second_throw is not None
-            and self.first_throw + self.second_throw == 10
+            and self.first_throw + self.second_throw == MAX_PINS_PER_THROW
         )
 
     @property
     def is_strike(self):
-        return self.first_throw == 10
+        return self.first_throw == MAX_PINS_PER_THROW
 
     def record_throw(self, pins):
-        if pins not in range(0, 11):  # include 10
-            raise ValueError(f"Invalid number of pins: {pins}")
+        Guard.against_invalid_pins(pins)
 
-        if self._first_throw is None:
+        if self.first_throw is None:
             self._first_throw = pins
-        elif self._first_throw + pins > 10:
-            raise ValueError(f"Total pins for frame cannot exceed 10")
         else:
+            Guard.against_exceeding_allowed_pins_for_frame(self.first_throw, pins)
             self._second_throw = pins
 
     def __eq__(self, other):
@@ -58,3 +61,23 @@ class BowlingFrame:
             and self.first_throw == other.first_throw
             and self.second_throw == other.second_throw
         )
+
+
+class Guard:
+    def against_non_sequential_throws(first_throw, second_throw):
+        if first_throw is None and second_throw is not None:
+            raise ValueError("Cannot initialize frame without sequential throws")
+
+    def against_second_throw_after_strike(first_throw, second_throw):
+        if first_throw == MAX_PINS_PER_THROW and second_throw is not None:
+            raise ValueError("Cannot initialize frame with second throw after strike")
+
+    def against_invalid_pins(pins):
+        if pins not in range(0, 11):  # include 10
+            raise ValueError(f"Invalid number of pins: {pins}")
+
+    def against_exceeding_allowed_pins_for_frame(first_throw, second_throw):
+        total = sum(filter(None, [first_throw, second_throw]))
+
+        if total > MAX_PINS_PER_THROW:
+            raise ValueError(f"Total pins for frame cannot exceed {MAX_PINS_PER_THROW}")
