@@ -1,19 +1,23 @@
-# Bowling Kata
+# Bowling Game Tracker
 
-## Problem Description
+## Scoring Rules
 
-Create a program, which, given a valid sequence of rolls for one line of American Ten-Pin Bowling, produces the total score for the game. Unlike the standard bowling kata rules, we will be covering the following validation checks:
+Source: [Wikipedia](https://en.wikipedia.org/wiki/Ten-pin_bowling#Scoring)
 
-- We will check for valid rolls.
-- We will check for correct number of rolls and frames.
-- We will provide scores for intermediate frames when available.
+In traditional scoring, one point is scored for each pin that is knocked over, and when less than all ten pins are knocked down in two rolls in a frame (an open frame), the frame is scored with the total number of pins knocked down. However, when all ten pins are knocked down with either the first or second rolls of a frame (a mark), bonus pins are awarded as follows:
 
-We can briefly summarize the scoring for this form of bowling:
+- Strike: When all ten pins are knocked down on the first roll (marked "X" on the scorescreen), the frame receives ten pins plus a bonus of pinfall on the next two rolls (not necessarily the next two frames). A strike in the tenth (final) frame receives two extra rolls for bonus pins.
+- Spare: When a second roll of a frame is needed to knock down all ten pins (marked "/" on the scorescreen), the frame receives ten pins plus a bonus of pinfall in the next roll (not necessarily the next frame). A spare in the first two rolls in the tenth (final) frame receives a third roll for bonus pins.
 
-- Each game, or “line” of bowling, includes ten turns, or “frames” for the bowler.
-- In each frame, the bowler gets up to two tries to knock down all the pins.
-- If in two tries, he fails to knock them all down, his score for that frame is the total number of pins knocked down in his two tries.
-- If in two tries he knocks them all down, this is called a “spare” and his score for the frame is ten plus the number of pins knocked down on his next throw (in his next turn).
-- If on his first try in the frame he knocks down all the pins, this is called a “strike”. His turn is over, and his score for the frame is ten plus the simple total of the pins knocked down in his next two rolls.
-- If he gets a spare or strike in the last (tenth) frame, the bowler gets to throw one or two more bonus balls, respectively. These bonus throws are taken as part of the same turn. If the bonus throws knock down all the pins, the process does not repeat: the bonus throws are only used to calculate the score of the final frame.
-- The game score is the total of all frame scores.
+The maximum score is 300, achieved by getting twelve strikes in a row within the same game (known as a perfect game).
+
+## Assignment
+
+Create an application that will track scoring a bowling game for a single player. For this exercise, there need not be a user interface; unit test functions will sufficient.
+
+### Additional Requirements
+
+- The API of the program should be simple. There should not have to be any state tracking outside of the game code itself (such as which frame to record a score on).
+- Be consistent with language (e.g. "roll" and "throw" are often used, just pick one and stick with it).
+- Only valid rolls/throws should be accepted by the application (e.g. 0-10 pins, no more than 10 total pins in a standard frame, etc.)
+- The rolls/throws should not be mutable outside of the intended API functions, properties, etc.
