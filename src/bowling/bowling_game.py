@@ -1,5 +1,6 @@
 from bowling.bowling_frame import BowlingFrame
 from bowling.last_bowling_frame import LastBowlingFrame
+from bowling.errors import NotSupportedError
 
 LAST_FRAME_INDEX = 9
 
@@ -45,7 +46,9 @@ class BowlingGame:
     def __create_frames(self):
         self._frames = []
         for i in range(0, 9):
-            self._frames.append(BowlingFrame(idx=i))
+            self._frames.append(
+                BowlingFrame(idx=i, updating_callback=self.__frame_updating_callback)
+            )
 
         self._frames.append(LastBowlingFrame(idx=LAST_FRAME_INDEX))
 
@@ -55,6 +58,10 @@ class BowlingGame:
             return None
 
         return frame.first_throw + frame.second_throw + next_throw
+
+    def __frame_updating_callback(self, idx):
+        if self._current_frame.idx != idx:
+            raise NotSupportedError("Cannot modify frames outside of the current")
 
     def __calculate_strike_frame_score(self, frame):
         next_frame = self.frames[frame.idx + 1]

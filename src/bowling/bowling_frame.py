@@ -2,7 +2,9 @@ from bowling import MAX_PINS_PER_THROW
 
 
 class BowlingFrame:
-    def __init__(self, idx=0, first_throw=None, second_throw=None):
+    def __init__(
+        self, idx=0, first_throw=None, second_throw=None, updating_callback=None
+    ):
         Guard.against_non_sequential_throws(first_throw, second_throw)
         Guard.against_second_throw_after_strike(first_throw, second_throw)
         if first_throw:
@@ -14,6 +16,7 @@ class BowlingFrame:
         self._idx = idx
         self._first_throw = first_throw
         self._second_throw = second_throw
+        self._updating_callback = updating_callback
 
     @property
     def idx(self):
@@ -45,6 +48,9 @@ class BowlingFrame:
 
     def record_throw(self, pins):
         Guard.against_invalid_pins(pins)
+
+        if self._updating_callback:
+            self._updating_callback(self.idx)
 
         if self.first_throw is None:
             self._first_throw = pins

@@ -1,5 +1,8 @@
+import pytest
+
 from bowling.bowling_game import BowlingGame
 from bowling.bowling_frame import BowlingFrame
+from bowling.errors import NotSupportedError
 
 
 def test_record_throw_stores_pins():
@@ -219,3 +222,12 @@ def test_total_score_for_perfect_game():
 
     result = game.total_score
     assert result == 300
+
+
+def test_updating_frame_beyond_current_frame():
+    game = BowlingGame()
+
+    with pytest.raises(NotSupportedError) as err:
+        game.frames[5].record_throw(1)
+
+    assert "Cannot modify frames outside of the current" in str(err.value)
