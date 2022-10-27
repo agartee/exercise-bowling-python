@@ -55,7 +55,7 @@ def test_frame_scores_with_one_frame_and_no_bonus():
     assert result == [3] + [None] * 9
 
 
-def test_total_score_with_one_frame_and_no_bonuses():
+def test_total_score_with_one_frame_and_no_bonus():
     game = BowlingGame()
     game.record_throw(1)
     game.record_throw(2)
@@ -176,7 +176,7 @@ def test_total_score_with_strike_and_two_following_strikes():
     assert result == 30
 
 
-def test_frame_scores_for_full_game_with_no_bonuses_on_last_frame():
+def test_frame_scores_for_full_game_with_no_bonus_on_last_frame():
     game = BowlingGame()
 
     for i in range(0, 9):  # standard frames
@@ -190,7 +190,7 @@ def test_frame_scores_for_full_game_with_no_bonuses_on_last_frame():
     assert result == [30] * 7 + [21, 12, 2]
 
 
-def test_total_score_for_full_game_with_no_bonuses_on_last_frame():
+def test_total_score_for_full_game_with_no_bonus_on_last_frame():
     game = BowlingGame()
 
     for i in range(0, 9):  # standard frames

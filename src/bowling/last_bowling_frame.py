@@ -71,7 +71,7 @@ class Guard:
         if (first_throw is None and second_throw is not None) or (
             second_throw is None and third_throw is not None
         ):
-            raise ValueError("Cannot initialize last frame without sequential throws")
+            raise ValueError("Cannot initialize frame without sequential throws")
 
     def against_third_throw_if_not_allowed(first_throw, second_throw):
         if second_throw is not None and third_throw_not_allowed(
