@@ -13,7 +13,7 @@ The maximum score is 300, achieved by getting twelve strikes in a row within the
 
 ## Assignment
 
-Create an application that will track scoring a bowling game for a single player. For this exercise, there need not be a user interface; unit test functions will sufficient.
+Create an application that will track scoring a bowling game for a single player. For this exercise, there need not be a user interface; unit test functions are sufficient.
 
 ### Additional Requirements
 
