@@ -16,6 +16,17 @@ if [ "${BASH_SOURCE[0]}" -ef "$0" ];
 fi
 
 # **************************************************************************************
+# Check dpkg Installation
+# **************************************************************************************
+DPKG_LOCATION=$(which dpkg 2> /dev/null)
+if [ -z "$DPKG_LOCATION" ]
+    then echo -e "${RED}dpkg installation not found.${NC}"
+    exit 1
+fi
+
+echo -e "${GREEN}dpkg installation found.${NC}" 
+
+# **************************************************************************************
 # Check Python Installation
 # **************************************************************************************
 MIN_PYTHON_VERSION="3.9"
