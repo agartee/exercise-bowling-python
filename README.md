@@ -11,13 +11,14 @@ In traditional scoring, one point is scored for each pin that is knocked over, a
 
 The maximum score is 300, achieved by getting twelve strikes in a row within the same game (known as a perfect game).
 
-## Assignment
+## Application Description
 
-Create an application that will track scoring a bowling game for a single player. For this exercise, there need not be a user interface; unit test functions are sufficient.
+A module that will track scoring a bowling game for a single player. This is a training tool used to help mentor junior developers.
 
-### Additional Requirements
+### Noteworthy Requirements for Mentees
 
-- The API of the program should be simple. There should not have to be any state tracking outside of the game code itself (such as which frame to record a score on).
+- The API of the program should be simple.
+- There should not have to be any state tracking outside of the game code itself (e.g.s which frame to record a score on).
 - Be consistent with language (e.g. "roll" and "throw" are often used, just pick one and stick with it).
 - Only valid rolls/throws should be accepted by the application (e.g. 0-10 pins, no more than 10 total pins in a standard frame, etc.)
-- The rolls/throws should not be mutable outside of the intended API functions, properties, etc.
+- One should not be able to make rolls/throws outside of the intended API functions, properties, etc.
